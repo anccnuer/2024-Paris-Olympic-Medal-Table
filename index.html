@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="top">
+        <h1>巴黎子奥运会奖牌榜</h1>
+        <h5>实时更新，数据来源于央视</h5>
+    </div>
+    <table id="lists">
+        <tr>
+            <th>排名</th>
+            <th>国家/地区</th>
+            <th>金牌</th>
+            <th>银牌</th>
+            <th>铜牌</th>
+            <th>总计</th>
+        </tr>
+    </table>
+    <script>
+        let data = ''
+        function jsonp(callback) {
+            let url = 'https://api.cntv.cn/Olympic/getOlyMedals?serviceId=2024aoyun&olyseason=2024S&itemcode=GEN-------------------------------&t=jsonp&cb=banomedals'
+            const script = document.createElement('script');
+            script.src = url + '&callback=' + callback;
+            document.body.appendChild(script);
+        }
+
+        function handleResponse(response) {
+           data = response.data.medalsList;
+        //    console.log(data)
+           render(data);
+        }
+
+        jsonp('handleResponse');
+        function render(lists) {
+            let lists_elm = document.getElementById('lists');
+            lists.forEach(list => {
+                lists_elm.innerHTML += 
+                `
+                <tr>
+                    <td>${list.rank}</td>
+                    <td>${list.countryname}</td>
+                    <td>${list.gold}</td>
+                    <td>${list.silver}</td>
+                    <td>${list.bronze}</td>
+                    <td>${list.count}</td>
+                </tr>
+                `
+            });
+        }
+
+    </script>
+</body>
+
+</html>
